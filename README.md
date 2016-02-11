@@ -9,11 +9,11 @@ with a small, easy to build remote.
 The System
 ----------
 
-This is what the remote looks like.
+This is what the remote looks like.  
 [![OOK-Remote](pics/ook-remote.jpg)](pics/ook-remote.jpg)
 
 You can turn on or off any of these devices, regardless of
-their configuration.
+their configuration.  
 [![Controllable Devices](pics/supported-devices.jpg)](pics/supported-devices.jpg)
 
 
