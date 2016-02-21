@@ -24,7 +24,7 @@ Requirements
 * Some Arduino compatible device.
   This project was created using [Adafruit's Trinket](https://www.adafruit.com/products/1501).
 * An 433MHz transmitter.
-  This project was created using a [simple transmitter board](www.amazon.com/dp/B008A4UWK6/).
+  This project was created using a [simple transmitter board](http://www.amazon.com/dp/B008A4UWK6/).
 * An antenna suitable for the 433MHz band.
 * Some wires, pin headers, a switch, etc.
 
