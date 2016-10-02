@@ -15,7 +15,7 @@ This is what the remote looks like.
 You can turn on or off any of these devices, regardless of
 their configuration.  
 [![Controllable Devices](pics/supported-devices.jpg)](pics/supported-devices.jpg)  
-[![Controllable Devices](pics/supported-devices.jpg)](pics/supported-devices-mkt.jpg)
+[![Controllable Devices](pics/supported-devices-mkt.jpg)](pics/supported-devices-mkt.jpg)
 
 
 Requirements
