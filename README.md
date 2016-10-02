@@ -1,7 +1,7 @@
 433MHz OOK Remote
 =================
 
-Control some devices such as wireless sockets or sex toys
+Control some devices such as wireless sockets, alarm systems or sex toys
 with a small, easy to build remote.
 
 
@@ -44,6 +44,7 @@ compatible device. As you keep pushing the button, you can see the LED blinking.
 * 6 blinks = Disarm MKT M2B GSM alarm systems (takes up to 30min).
 * 7 blink  = Turn on wireless massage eggs.
 * 8 blinks = Turn off wireless massage eggs.
+
 Example: To turn off all wireless sockets (type A), just press and hold the button
 until the LED flashed 4 times. Then release it. The remote will send "turn-off-packets"
 for all possible configurations of the sockets. While it is sending packets,
