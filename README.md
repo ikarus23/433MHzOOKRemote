@@ -14,8 +14,8 @@ This is what the remote looks like.
 
 You can turn on or off any of these devices, regardless of
 their configuration.  
-[![Controllable Devices](pics/supported-devices.jpg)](pics/supported-devices.jpg)
-
+[![Controllable Devices](pics/supported-devices.jpg)](pics/supported-devices.jpg)  
+[![Controllable Devices](pics/supported-devices.jpg)](pics/supported-devices-mkt.jpg)
 
 
 Requirements
@@ -36,13 +36,14 @@ Usage
 Just configure the pin numbers to match your setup and flash the code on your Arduino
 compatible device. As you keep pushing the button, you can see the LED blinking.
 
-* 1 blink  = Turn on wireless massage eggs.
-* 2 blinks = Turn off wireless massage eggs.
-* 3 blinks = Turn on wireless sockets of type A (left in the picture).
-* 4 blinks = Turn off wireless sockets of type A.
-* 5 blinks = Turn on wireless sockets of type B (middle in the picture).
-* 6 blinks = Turn off wireless sockets of type B.
-
+* 1 blinks = Turn on wireless sockets of type A (left in the picture).
+* 2 blinks = Turn off wireless sockets of type A.
+* 3 blinks = Turn on wireless sockets of type B (middle in the picture).
+* 4 blinks = Turn off wireless sockets of type B.
+* 5 blinks = Arm MKT M2B GSM alarm systems (takes up to 30min).
+* 6 blinks = Disarm MKT M2B GSM alarm systems (takes up to 30min).
+* 7 blink  = Turn on wireless massage eggs.
+* 8 blinks = Turn off wireless massage eggs.
 Example: To turn off all wireless sockets (type A), just press and hold the button
 until the LED flashed 4 times. Then release it. The remote will send "turn-off-packets"
 for all possible configurations of the sockets. While it is sending packets,
